@@ -1,0 +1,23 @@
+{
+  "name": "mvpplaywright",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "styleFix": "npx prettier ./app -w",
+    "tests": "npx playwright test",
+    "allureGenerate": "npx allure generate -c ./app/test-results/allure-results -o ./app/test-results/allure-report",
+    "allureOpen": "npx allure open ./app/test-results/allure-report",
+    "report": "npm run allureGenerate && npm run allureOpen"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.44.1",
+    "@types/node": "^20.12.12",
+    "allure-playwright": "^2.15.1",
+    "dotenv": "^16.4.5",
+    "prettier": "^3.2.5"
+  }
+}
