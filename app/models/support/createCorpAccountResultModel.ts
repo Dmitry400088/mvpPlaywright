@@ -1,4 +1,4 @@
-export interface createCorpAccountResultModel {
+export interface CreateCorpAccountResultModel {
   UserId: string;
   ApiKey: string;
   CorporateAccountId: string;

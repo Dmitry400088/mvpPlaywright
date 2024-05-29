@@ -1,4 +1,4 @@
-export interface createAccountModel {
+export interface CreateAccountModel {
   isAdmin: boolean;
   accountName: string;
   accountType: number;

@@ -1,10 +1,10 @@
-import { createAccountModel } from '../../models/support/createAccountModel';
+import { CreateAccountModel } from '../../models/support/createAccountModel';
 import { randomString, randomEmail } from '../generator';
 
 export const getSupportAccountModel = (
   accountName?: string,
   enabledFeatures: string = ''
-): createAccountModel => {
+): CreateAccountModel => {
   accountName = accountName == undefined ? randomString() : accountName;
 
   return {
