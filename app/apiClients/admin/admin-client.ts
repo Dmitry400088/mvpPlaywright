@@ -18,27 +18,30 @@ export class AdminClient {
   };
 
   //**Получить список доступных подписок */
-  getSubscriptionPlan = async(accountId:string):Promise<SubscriptionPlanModel[]>=>{
-    const url=`/api/enterpriseAccount/subscriptions/subscriptionPlans?accountId=${accountId}`
+  getSubscriptionPlan = async (
+    accountId: string
+  ): Promise<SubscriptionPlanModel[]> => {
+    const url = `/api/enterpriseAccount/subscriptions/subscriptionPlans?accountId=${accountId}`;
     const response = await this.context.get(url);
-    await expect(response,'Не удалось получить достпуные подписки').toBeOK();
-  
-    return await response.json() as SubscriptionPlanModel[];
-  }
+    await expect(response, 'Не удалось получить достпуные подписки').toBeOK();
+
+    return (await response.json()) as SubscriptionPlanModel[];
+  };
 
   //**Установить подписку аккаунту */
-  setSetSubscriptionPlan = async(accountId: string, subscriptionPlanId: string):Promise<void>=>{
+  setSetSubscriptionPlan = async (
+    accountId: string,
+    subscriptionPlanId: string
+  ): Promise<void> => {
     console.log(`Установить аккаунту ${accountId} подписку`);
     const url = `/api/enterpriseAccount/subscriptions?accountId=${accountId}`;
-    const response= await this.context.post(url, {
-        data:{
-            startDate:new Date(),
-            subscriptionPlanId: subscriptionPlanId,
-           
-        }
+    const response = await this.context.post(url, {
+      data: {
+        startDate: new Date(),
+        subscriptionPlanId: subscriptionPlanId
+      }
     });
 
-    await expect(response,'Не удалось включить подписку').toBeOK();
-
-  }
+    await expect(response, 'Не удалось включить подписку').toBeOK();
+  };
 }
