@@ -17,6 +17,7 @@ dotenvConfig({ path: resolve(__dirname, '.env'), override: true });
 
 export default defineConfig({
   testDir: './app/tests',
+  outputDir:'./app/test-results',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -27,7 +28,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [['html',{
-    outputFolder: "./app/test-results/html-report",
+    outputFolder: "./app/html-report",
   }],
   ['allure-playwright',{
     detail: false,
@@ -47,7 +48,8 @@ export default defineConfig({
       args:["--window-size=1024,720","--window-position=-5,-5"]
     },
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    trace: 'retain-on-failure',
+    screenshot :'only-on-failure'
   }
   /* Run your local dev server before starting the tests */
   // webServer: {

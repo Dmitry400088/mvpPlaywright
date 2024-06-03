@@ -1,5 +1,6 @@
 import { allure } from 'allure-playwright';
 import { test, expect } from '../fixtures/projectTemplateFixture';
+import { Teams } from '../utils/teams';
 
 test.describe(
   'Project template',
@@ -8,8 +9,8 @@ test.describe(
 
     //можно делать запуск тестов по тегам: npx playwright test --grep @smoke
     //теги можно сделать массивом и комбинировать запуски
-    tag: '@smoke',
-    annotation: { type: 'app tests', description: 'тестны на новый UI' }
+    tag: ['@smoke', Teams.swat],
+    annotation: [{ type: 'app tests', description: 'тестны на новый UI' }]
   },
   () => {
     test(
@@ -19,7 +20,7 @@ test.describe(
         annotation: [
           {
             type: 'issue',
-            description: 'https://github.com/microsoft/playwright/issues/23180'
+            description: 'тут может быть ссылка на бан или таску'
           },
           { type: 'performance', description: 'very slow test!' }
         ]
