@@ -26,10 +26,12 @@ test.describe(
         ]
       },
       async ({ homePage, projectTemplatesPage, page }) => {
-        allure.id('1001');
-        allure.feature('Шаблоны');
-        allure.suite('Шаблоны проектов');
-        allure.subSuite('Создание нового шаблона проекта');
+        await allure.id('1001');
+        await allure.description("Тест проверяет создание нового шаблшона проектов");
+        await allure.owner(Teams.swat);
+        await allure.feature('Шаблоны');
+        await allure.suite('Шаблоны проектов');
+        await allure.subSuite('Создание нового шаблона проекта');
 
         const templateName = 'Best Template';
 
