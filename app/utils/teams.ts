@@ -1,3 +1,3 @@
-export enum Teams{
-    swat='@swat'
+export enum Teams {
+  swat = '@swat'
 }

@@ -1,6 +1,13 @@
 import { allure } from 'allure-playwright';
 import { test, expect } from '../fixtures/projectTemplateFixture';
 import { Teams } from '../utils/teams';
+import { getTranslationMemory } from '../utils/api/translationMemory';
+import { language } from '../utils/languages';
+import { TranslationMemoriesClient } from '../apiClients/translationMemories/translationMemoriesClient';
+import { ProjectsClient } from '../apiClients/projects/projectsClient';
+import { TranslationMemoryModel } from '../models/projectTemplate/translationMemoryModel';
+import { getProjectTemplateModel } from '../utils/api/projectTemplate';
+import { ProjectTemplatesClient } from '../apiClients/project-templates/project-templates-client';
 
 test.describe(
   'Project template',
@@ -27,7 +34,9 @@ test.describe(
       },
       async ({ homePage, projectTemplatesPage, page }) => {
         await allure.id('1001');
-        await allure.description("Тест проверяет создание нового шаблшона проектов");
+        await allure.description(
+          'Тест проверяет создание нового шаблшона проектов'
+        );
         await allure.owner(Teams.swat);
         await allure.feature('Шаблоны');
         await allure.suite('Шаблоны проектов');
@@ -107,6 +116,84 @@ test.describe(
               homePage.shortcutCard,
               'Шаблон не отобразился на страницу HomePage'
             ).toContainText([templateName]);
+          }
+        );
+      }
+    );
+
+    test(
+      'Should change TM in project template',
+      {
+        annotation: [
+          {
+            type: 'bug fix',
+            description:
+              'https://portal.smartcat.ai/youtrack/issue/SUPPORT-4980'
+          }
+        ]
+      },
+      async ({ homePage, projectTemplatesPage, page }) => {
+        await allure.id('1002');
+        await allure.description(
+          'Тест проверяет баг, когда при изменении TM в шаблоне проекта данная TM не подключалась на запись'
+        );
+        await allure.owner(Teams.swat);
+        await allure.feature('Шаблоны');
+        await allure.suite('Шаблоны проектов');
+        await allure.subSuite('Изменение шаблона');
+
+        const templateName = `MyBestTemplate`;
+        const tmClient = new TranslationMemoriesClient(page.context());
+        const projectTemplateClient = new ProjectTemplatesClient(
+          page.context()
+        );
+
+        let tm1, tm2;
+        await allure.step('Создать две одинаковых TM', async () => {
+          const promiseTm1 = tmClient.createOrUpdateTranslationMemory(
+            getTranslationMemory(`tm1`, language.English, [language.Russian])
+          );
+          const promiseTm2 = tmClient.createOrUpdateTranslationMemory(
+            getTranslationMemory(`tm2`, language.English, [language.Russian])
+          );
+          await Promise.all([promiseTm1, promiseTm2]).then((result) => {
+            [tm1, tm2] = result;
+          });
+        });
+
+        await allure.step(
+          'Создать шаблон проекта с одной TMкой на запись',
+          async () => {
+            const translationMemories: TranslationMemoryModel[] = [
+              {
+                id: tm1.id,
+                isWritable: true,
+                threshold: 75
+              }
+            ];
+
+            const templateModel = await getProjectTemplateModel({
+              context: page.context(),
+              translationMemory: translationMemories,
+              name: templateName
+            });
+            await projectTemplateClient.create(templateModel);
+          }
+        );
+
+        await allure.step(
+          'Обновить страницу HomePage чтобы увидеть созданный шаблон',
+          async () => {
+            await homePage.reload();
+            await homePage.waitForLoad();
+          }
+        );
+
+        await allure.step(
+          'Открыть выпадающий список у созданного шаблона и нажать редактировать',
+          async () => {
+            await homePage.clickEditTemplate(templateName);
+            await homePage.dropdownMenu.selectMenuItem(`Edit project template`);
           }
         );
       }

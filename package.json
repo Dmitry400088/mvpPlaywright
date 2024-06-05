@@ -7,7 +7,8 @@
     "tests": "npx playwright test",
     "allureGenerate": "npx allure generate -c ./app/test-results/allure-results -o ./app/test-results/allure-report",
     "allureOpen": "npx allure open ./app/test-results/allure-report",
-    "report": "npm run allureGenerate && npm run allureOpen"
+    "report": "npm run allureGenerate && npm run allureOpen",
+    "ui":"npx playwright test --ui"
   },
   "keywords": [],
   "author": "",
